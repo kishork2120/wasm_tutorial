@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>WASM tutorial</title>
+</head>
+
+<body>
+  This is WASM tutorial
+  <br>
+  <input type="number" id="firstNumber" placeholder="Enter first number" />
+  <input type="number" id="secondNumber" placeholder="Enter second number" />
+  <button id="calculate">Calculate</button>
+  <br>
+  <span id="answer"></span>
+</body>
+<script>
+  fetch('program.wasm').then(bytes => bytes.arrayBuffer())
+    .then(async (value) => {
+      const compiledValue = await WebAssembly.instantiate(value, {});
+
+      document.querySelector('#calculate').addEventListener('click',()=>{
+        document.querySelector('#answer').innerHTML = compiledValue.instance.exports.simpleAdd(
+          document.querySelector('#firstNumber').value,
+          document.querySelector('#secondNumber').value
+        )
+      });
+
+    })
+</script>
+</html>
